@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Service from './Pages/Service';
+import ServiceListManagement from './Pages/ServiceList';
 
 const Layout = () => {
   const navItems = [
@@ -172,6 +173,7 @@ const Layout = () => {
             <div className="border rounded-lg p-6">
 
               <Service/>
+              <ServiceListManagement/>
               <p>Your main content goes here</p>
             </div>
           </div>
