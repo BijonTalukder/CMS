@@ -30,8 +30,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import Service from './Pages/Service';
-import ServiceListManagement from './Pages/ServiceList';
+// import Service from './Pages/Service';
+// import ServiceListManagement from './Pages/ServiceList';
+import ServiceTypeManager from './Pages/serviceType';
 
 const Layout = () => {
   const navItems = [
@@ -172,8 +173,10 @@ const Layout = () => {
 
             <div className="border rounded-lg p-6">
 
-              <Service/>
-              <ServiceListManagement/>
+              {/* <Service/> */}
+              {/* <ServiceListManagement/> */}
+              <ServiceTypeManager/>
+              {/* <ServiceListManagement/> */}
               <p>Your main content goes here</p>
             </div>
           </div>
