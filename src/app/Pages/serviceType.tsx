@@ -1,12 +1,15 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from 'lucide-react';
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { PlusCircle, ChevronDown, ChevronRight, Trash2, Radio } from 'lucide-react';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  // RadioGroup,
+  // RadioGroupItem
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 interface Service {
   id?: string;
@@ -30,6 +34,7 @@ interface Service {
   type?: string;
   url?: string;
   imageUrl?: string;
+  isClikableLink:boolean;
   serviceId: string; // Foreign key
 }
 
@@ -48,8 +53,8 @@ const ServiceTypeManager = () => {
     imageUrl: ''
   });
   const [newService, setNewService] = useState<Service>({
-    // id: 0,
-    serviceId: '', // Initialize with empty string
+    isClikableLink:false,
+    serviceId: '', 
     title: '',
     shortDescription: '',
     description: '',
@@ -61,7 +66,7 @@ const ServiceTypeManager = () => {
   const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
   const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(false);
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
-
+  const [isClikableLink, setIsClikableLink] = useState<boolean>(false);
   // Fetch service types and services from the API
   useEffect(() => {
     const fetchServiceTypes = async () => {
@@ -175,7 +180,7 @@ const ServiceTypeManager = () => {
 
         setServiceTypes(updatedServiceTypes);
         setNewService({
-          // id: 0,
+          isClikableLink:false,
           serviceId: '',
           title: '',
           shortDescription: '',
@@ -365,6 +370,38 @@ const ServiceTypeManager = () => {
                             />
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="isClikableLink" className="text-right">
+                              Is Clikable Link
+                            </Label>
+                            <RadioGroup 
+  defaultValue="option-two"
+  onValueChange={(value) => setIsClikableLink(value === "option-one")}
+>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value="option-one" id="option-one" />
+    <Label htmlFor="option-one">Yes</Label>
+  </div>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value="option-two" id="option-two" />
+    <Label htmlFor="option-two">No</Label>
+  </div>
+</RadioGroup>
+
+                          </div>
+                          {isClikableLink && (
+  <div className="grid grid-cols-4 items-center gap-4">
+    <Label htmlFor="url" className="text-right">
+      URL
+    </Label>
+    <Input
+      id="url"
+      value={newService.url}
+      onChange={(e) => setNewService({ ...newService, url: e.target.value })}
+      className="col-span-3"
+    />
+  </div>
+)}
+                          {/* <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="url" className="text-right">
                               URL
                             </Label>
@@ -374,7 +411,7 @@ const ServiceTypeManager = () => {
                               onChange={(e) => setNewService({ ...newService, url: e.target.value })}
                               className="col-span-3"
                             />
-                          </div>
+                          </div> */}
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="imageUrl" className="text-right">
                               Image URL
