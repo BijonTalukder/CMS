@@ -33,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 // import Service from './Pages/Service';
 // import ServiceListManagement from './Pages/ServiceList';
 import ServiceTypeManager from './Pages/serviceType';
+import TouristSpots from './Pages/TouristSpots';
 
 const Layout = () => {
   const navItems = [
@@ -173,10 +174,9 @@ const Layout = () => {
 
             <div className="border rounded-lg p-6">
 
-              {/* <Service/> */}
-              {/* <ServiceListManagement/> */}
+          
               <ServiceTypeManager/>
-              {/* <ServiceListManagement/> */}
+         <TouristSpots/>
               <p>Your main content goes here</p>
             </div>
           </div>

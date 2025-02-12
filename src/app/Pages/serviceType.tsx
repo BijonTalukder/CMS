@@ -110,7 +110,7 @@ const ServiceTypeManager = () => {
       ]);
       console.log('New service type added:', newServiceType);
       try {
-        const response = await fetch('https://backend-eight-lake-96.vercel.app/api/v1/services-list/create', {
+        const response = await fetch('https://backend-eight-lake-96.vercel.app/api/v1/services/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
