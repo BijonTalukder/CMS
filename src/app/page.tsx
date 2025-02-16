@@ -32,8 +32,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 // import Service from './Pages/Service';
 // import ServiceListManagement from './Pages/ServiceList';
-import ServiceTypeManager from './Pages/serviceType';
-import TouristSpots from './Pages/TouristSpots';
+import ServiceTypeManager from './(pages)/serviceType';
+import TouristSpots from './(pages)/TouristSpots';
 
 const Layout = () => {
   const navItems = [
