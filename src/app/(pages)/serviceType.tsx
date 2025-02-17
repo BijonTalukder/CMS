@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Service {
   id?: string;
@@ -37,20 +38,35 @@ interface Service {
   isClikableLink:boolean;
   serviceId: string; // Foreign key
 }
-
+// let bannerImage: string[] = [];
 interface ServiceType {
   id?: string;
   title: string;
   imageUrl?: string;
-  serviceList: Service[];
+  type:string;
+  isLottie:boolean,
+  bannerImage: string[];
+    serviceList: Service[];
   isOpen: boolean;
 }
+interface ServiceTypeData {
 
+  title: string;
+  imageUrl?: string;
+  type:string;
+  isLottie:boolean,
+  bannerImage?: string[];
+  
+}
 const ServiceTypeManager = () => {
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [newServiceType, setNewServiceType] = useState({
     title: '',
-    imageUrl: ''
+    imageUrl: '',
+    isLottie:false,
+    type:"card",
+    bannerImage:[]
+
   });
   const [newService, setNewService] = useState<Service>({
     isClikableLink:false,
@@ -96,7 +112,15 @@ const ServiceTypeManager = () => {
       isOpen: type.id === typeId ? !type.isOpen : type.isOpen
     })));
   };
-
+  const handleTypeChange = (e:any) => {
+    const selectedType = e.target.value;
+    setNewServiceType(prevState => ({
+      ...prevState,
+      type: selectedType,
+      // Reset the banner image field when type changes to card
+      bannerImage: selectedType === 'banner' ? prevState.bannerImage : []
+    }));
+  };
   const handleAddServiceType =async () => {
     if (newServiceType.title.trim()) {
       setServiceTypes([
@@ -104,6 +128,9 @@ const ServiceTypeManager = () => {
         {
           // id: serviceTypes.length + 1,
           title: newServiceType.title,
+          bannerImage:newServiceType.bannerImage,
+          type:newServiceType.type,
+          isLottie:newServiceType.isLottie,
           serviceList: [],
           isOpen: false
         }
@@ -132,7 +159,10 @@ const ServiceTypeManager = () => {
       }
       setNewServiceType({
         title: '',
-        imageUrl: ''
+        imageUrl: '',
+        type:"card",
+        isLottie:false,
+        bannerImage:[]
       });
       setIsTypeDialogOpen(false);
     }
@@ -229,41 +259,89 @@ const ServiceTypeManager = () => {
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add New Service Type</DialogTitle>
-                <DialogDescription>
-                  Enter the name for the new service type.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    value={newServiceType.title}
-                    onChange={(e) => setNewServiceType({...newServiceType, title:e.target.value})}
-                    className="col-span-3"
-                  />
-                </div>
+      <DialogHeader>
+        <DialogTitle>Add New Service Type</DialogTitle>
+        <DialogDescription>
+          Enter the name for the new service type.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="grid gap-4 py-4">
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-right">Name</Label>
+          <Input
+            id="name"
+            value={newServiceType.title}
+            onChange={(e) => setNewServiceType({ ...newServiceType, title: e.target.value })}
+            className="col-span-3"
+          />
+        </div>
 
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Image URL
-                  </Label>
-                  <Input
-                    id="imageUrl"
-                    value={newServiceType.imageUrl}
-                    onChange={(e) => setNewServiceType({...newServiceType,imageUrl: e.target.value})}
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleAddServiceType}>Add Service Type</Button>
-              </DialogFooter>
-            </DialogContent>
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="type" className="text-right">Type</Label>
+          <div className="col-span-3">
+            <Select
+              value={newServiceType.type}
+              onValueChange={handleTypeChange}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="card">Card</SelectItem>
+                <SelectItem value="banner">Banner</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="imageUrl" className="text-right">Image URL</Label>
+          <Input
+            id="imageUrl"
+            value={newServiceType.imageUrl}
+            onChange={(e) => setNewServiceType({ ...newServiceType, imageUrl: e.target.value })}
+            className="col-span-3"
+            disabled={newServiceType.type === 'banner'}
+          />
+        </div>
+
+        {newServiceType.type === 'banner' && (
+  <div className="grid grid-cols-4 items-center gap-4">
+    <Label htmlFor="bannerImages" className="text-right">Banner Image URLs</Label>
+    <Input
+      id="bannerImages"
+      type="text"
+      value={newServiceType.bannerImage.join(',')} // Displaying comma-separated URLs
+      onChange={(e) => {
+        const urls = e.target.value.split(',').map(url => url.trim()); // Split by commas and trim whitespace
+        setNewServiceType({
+          ...newServiceType,
+          bannerImage: urls,
+        });
+      }}
+      className="col-span-3"
+      placeholder="Enter multiple image URLs separated by commas"
+    />
+  </div>
+)}
+
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="isLottie" className="text-right">Is Lottie?</Label>
+          <Input
+            id="isLottie"
+            type="checkbox"
+            checked={newServiceType.isLottie}
+            onChange={() => setNewServiceType({ ...newServiceType, isLottie: !newServiceType.isLottie })}
+            className="col-span-3"
+          />
+        </div>
+      </div>
+      <DialogFooter>
+        <Button onClick={handleAddServiceType}>Add Service Type</Button>
+      </DialogFooter>
+    </DialogContent>
           </Dialog>
         </CardHeader>
         <CardContent>

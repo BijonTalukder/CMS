@@ -176,7 +176,7 @@ const Layout = () => {
 
           
               <ServiceTypeManager/>
-         <TouristSpots/>
+         {/* <TouristSpots/> */}
               <p>Your main content goes here</p>
             </div>
           </div>
