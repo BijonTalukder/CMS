@@ -318,6 +318,7 @@ const ServiceTypeManager = () => {
         const urls = e.target.value.split(',').map(url => url.trim()); // Split by commas and trim whitespace
         setNewServiceType({
           ...newServiceType,
+          //@ts-ignore
           bannerImage: urls,
         });
       }}
