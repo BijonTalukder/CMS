@@ -34,6 +34,7 @@ import { Badge } from "@/components/ui/badge";
 // import ServiceListManagement from './Pages/ServiceList';
 import ServiceTypeManager from './Pages/serviceType';
 import TouristSpots from './Pages/TouristSpots';
+import NewsList from './Pages/NewsList';
 
 const Layout = () => {
   const navItems = [
@@ -176,7 +177,8 @@ const Layout = () => {
 
           
               <ServiceTypeManager/>
-         <TouristSpots/>
+              <NewsList/>
+         {/* <TouristSpots/> */}
               <p>Your main content goes here</p>
             </div>
           </div>
