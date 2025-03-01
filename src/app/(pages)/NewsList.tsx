@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import Image from 'next/image';
 
 const NewsList = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -103,7 +104,9 @@ const NewsList = () => {
               <CardHeader className="p-4">
                 {/* Source info */}
                 <div className="flex items-center gap-2 mb-2">
-                  <img 
+                  <Image
+                  height={200}
+                  width={200}
                     src={item.sourceIcon} 
                     alt={item.source}
                     className="w-6 h-6 rounded-full"

@@ -7,7 +7,6 @@ import {
   Menu,
   Bell,
   Search,
-  User,
   ChevronDown
 } from 'lucide-react';
 
