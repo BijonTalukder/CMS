@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Star, Clock, DollarSign, Menu } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
+// import Image from "next/image";
 // import Image from "next/image";
 
 interface Service {
@@ -93,13 +93,12 @@ const TouristSpots: React.FC = () => {
               >
                 <div className="flex flex-col">
                   <div className="relative h-48 sm:h-64">
-                    <Image
+                    {/* <Image
                     height={200}
                     width={200}
                       src={spot.imageUrl}
                       alt={spot.title}
-                      // className="absolute h-full w-full object-cover"
-                    />
+                    /> */}
                   </div>
                   <div className="p-4">
                     <CardHeader className="p-0">
