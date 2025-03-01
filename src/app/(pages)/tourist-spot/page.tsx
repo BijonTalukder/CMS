@@ -26,7 +26,7 @@ const TouristSpots: React.FC = () => {
     const fetchServices = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/v1/services-list/services/67b435893c57d49ee64a0fbc"
+          "https://backend-eight-lake-96.vercel.app/api/v1/services-list/services/67b435893c57d49ee64a0fbc"
         );
         const data = await response.json();
         setSpots(data.data); // Ensure your API response structure matches this

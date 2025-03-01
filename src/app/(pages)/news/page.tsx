@@ -56,7 +56,7 @@ const NewsList = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/v1/news");
+        const response = await fetch("https://backend-eight-lake-96.vercel.app/api/v1/news");
         if (!response.ok) throw new Error("Failed to fetch news");
         const data = await response.json();
         setNewsItems(data?.data);
