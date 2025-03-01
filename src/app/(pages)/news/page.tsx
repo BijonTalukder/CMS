@@ -16,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Image from "next/image";
 
 interface NewsItem {
   id: string;
@@ -113,10 +114,14 @@ const NewsList = () => {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <div className="flex gap-2">
-          {categories.map(category => (
+          
+          {
+          
+          categories.map(category => (
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
+            //@ts-expect-error
               onClick={() => setSelectedCategory(category)}
               className="capitalize"
             >
@@ -149,7 +154,10 @@ const NewsList = () => {
                   Breaking News
                 </Badge>
               )}
-              <img
+              <
+                Image
+                height={200}
+                width={200}
                 src={item.imageUrl || "/api/placeholder/400/320"}
                 alt={item.imageAltText || item.title}
                 className="w-full h-60 object-cover rounded-t-lg"

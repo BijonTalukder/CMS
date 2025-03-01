@@ -53,7 +53,7 @@ const NewsList = () => {
     { value: "politics", label: "Politics" },
     { value: "sports", label: "Sports" }
   ];
-//@ts-ignore
+//@ts-expect-error
   const toggleFavorite = (id) => {
     setFavorites(prev => {
       const newFavorites = new Set(prev);
