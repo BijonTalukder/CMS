@@ -4,7 +4,7 @@ import { Search, Heart, Share2 } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
@@ -52,7 +52,7 @@ const NewsList = () => {
     { value: "politics", label: "Politics" },
     { value: "sports", label: "Sports" }
   ];
-
+//@ts-ignore
   const toggleFavorite = (id) => {
     setFavorites(prev => {
       const newFavorites = new Set(prev);
