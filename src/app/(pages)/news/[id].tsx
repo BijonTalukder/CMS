@@ -19,6 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from 'next/image';
 
 interface NewsDetailProps {
   onBack: () => void;
@@ -66,8 +67,9 @@ const NewsDetail = ({ onBack }: NewsDetailProps) => {
 
       <Card className="overflow-hidden">
         <div className="relative">
-          <img
-            src={article.imageUrl}
+          <Image
+          height={200}
+          width={200}           src={article.imageUrl}
             alt={article.title}
             className="w-full h-64 object-cover"
           />

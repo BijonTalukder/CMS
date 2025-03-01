@@ -121,7 +121,7 @@ const NewsList = () => {
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
-            //@ts-expect-error
+
               onClick={() => setSelectedCategory(category)}
               className="capitalize"
             >
