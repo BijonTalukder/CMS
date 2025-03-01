@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Search, MapPin, Star, Clock, DollarSign, Menu } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+// import Image from "next/image";
 
 interface Service {
   id: string;
@@ -97,7 +98,7 @@ const TouristSpots: React.FC = () => {
                     width={200}
                       src={spot.imageUrl}
                       alt={spot.title}
-                      className="absolute h-full w-full object-cover"
+                      // className="absolute h-full w-full object-cover"
                     />
                   </div>
                   <div className="p-4">
