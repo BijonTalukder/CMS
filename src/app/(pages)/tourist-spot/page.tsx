@@ -92,11 +92,11 @@ const TouristSpots: React.FC = () => {
               >
                 <div className="flex flex-col">
                   <div className="relative h-48 sm:h-64">
-                    <img
+                    <Image
                       src={spot.imageUrl}
                       alt={spot.title}
-                      // height={200}
-                      // width={200}
+                      height={200}
+                      width={200}
                       className="absolute h-full w-full object-cover"
                     />
                   </div>
