@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, ChevronDown, ChevronRight, Trash2, Radio } from 'lucide-react';
+import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -47,15 +47,15 @@ interface ServiceType {
     serviceList: Service[];
   isOpen: boolean;
 }
-interface ServiceTypeData {
+// interface ServiceTypeData {
 
-  title: string;
-  imageUrl?: string;
-  type:string;
-  isLottie:boolean,
-  bannerImage?: string[];
+//   title: string;
+//   imageUrl?: string;
+//   type:string;
+//   isLottie:boolean,
+//   bannerImage?: string[];
   
-}
+// }
 const ServiceTypeManager = () => {
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [newServiceType, setNewServiceType] = useState({
