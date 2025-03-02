@@ -22,7 +22,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import LoaderBar from '@/components/LoaderBar';
 
 interface Service {
   id?: string;
@@ -57,6 +58,7 @@ interface ServiceType {
   
 // }
 const ServiceTypeManager = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [newServiceType, setNewServiceType] = useState({
     title: '',
@@ -120,6 +122,7 @@ const ServiceTypeManager = () => {
     }));
   };
   const handleAddServiceType =async () => {
+    setLoading(true);
     if (newServiceType.title.trim()) {
       setServiceTypes([
         ...serviceTypes,
@@ -155,6 +158,7 @@ const ServiceTypeManager = () => {
       } catch (error) {
         console.error('Error submitting service:', error);
       }
+      setLoading(false);
       setNewServiceType({
         title: '',
         imageUrl: '',
@@ -167,6 +171,7 @@ const ServiceTypeManager = () => {
   };
 
   const handleAddService = async () => {
+    setLoading(true);
     if (newService.title.trim() && selectedTypeId) {
       // Set the serviceTypeId in the newService object
       const serviceToSubmit = {
@@ -222,6 +227,7 @@ const ServiceTypeManager = () => {
       } catch (error) {
         console.error('Error submitting service:', error);
       }
+      setLoading(false);
     }
   };
 
@@ -245,6 +251,8 @@ const ServiceTypeManager = () => {
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
+      <LoaderBar loading=
+      {loading}/>
       <Card>
         <CardHeader>
           <CardTitle>Service Type Manager</CardTitle>
@@ -436,15 +444,24 @@ const ServiceTypeManager = () => {
                             />
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="type" className="text-right">
+                         
+ <Label htmlFor="type" className="text-right">
                               Type
                             </Label>
-                            <Input
-                              id="type"
-                              value={newService.type}
-                              onChange={(e) => setNewService({ ...newService, type: e.target.value })}
-                              className="col-span-3"
-                            />
+<Select required={true} value={newService.type} onValueChange={(value) => setNewService({ ...newService, type: value })}>
+      <SelectTrigger  className="col-span-3">
+        <SelectValue placeholder="Select a type" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>design layout</SelectLabel>
+          <SelectItem value="sectionCardOne">section card one(flat text)</SelectItem>
+          <SelectItem value="sectionCardTwo">section card two(profile image card )</SelectItem>
+          <SelectItem value="sectionCardThree">section card three(tourist spot)</SelectItem>
+          <SelectItem value="sectionCardFour">sectior card four (newspaper)</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="isClikableLink" className="text-right">
