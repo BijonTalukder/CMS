@@ -7,7 +7,6 @@ import {
   Menu,
   Bell,
   Search,
-  User,
   ChevronDown
 } from 'lucide-react';
 
@@ -33,7 +32,7 @@ import { Badge } from "@/components/ui/badge";
 // import Service from './Pages/Service';
 // import ServiceListManagement from './Pages/ServiceList';
 import ServiceTypeManager from './(pages)/serviceType';
-import TouristSpots from './(pages)/TouristSpots';
+// import TouristSpots from './(pages)/TouristSpots';
 
 const Layout = () => {
   const navItems = [

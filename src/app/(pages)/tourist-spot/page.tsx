@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Search, MapPin, Star, Clock, DollarSign, Menu } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { baseUrl } from "@/utility/config";
 
 interface Service {
   id: string;
@@ -26,7 +27,7 @@ const TouristSpots: React.FC = () => {
     const fetchServices = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/v1/services-list/services/67b435893c57d49ee64a0fbc"
+          `${baseUrl}/services-list/services/67b435893c57d49ee64a0fbc`
         );
         const data = await response.json();
         setSpots(data.data); // Ensure your API response structure matches this
@@ -92,11 +93,11 @@ const TouristSpots: React.FC = () => {
               >
                 <div className="flex flex-col">
                   <div className="relative h-48 sm:h-64">
-                    <img
+                    <Image
                       src={spot.imageUrl}
                       alt={spot.title}
-                      // height={200}
-                      // width={200}
+                      height={200}
+                      width={200}
                       className="absolute h-full w-full object-cover"
                     />
                   </div>

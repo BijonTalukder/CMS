@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { PlusCircle, ChevronDown, ChevronRight, Trash2, Radio } from 'lucide-react';
+import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -53,15 +53,15 @@ interface ServiceType {
   serviceList: Service[];
   isOpen: boolean;
 }
-interface ServiceTypeData {
+// interface ServiceTypeData {
 
-  title: string;
-  imageUrl?: string;
-  type: string;
-  isLottie: boolean,
-  bannerImage?: string[];
+//   title: string;
+//   imageUrl?: string;
+//   type: string;
+//   isLottie: boolean,
+//   bannerImage?: string[];
 
-}
+// }
 const ServiceTypeManager = () => {
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
   const [newServiceType, setNewServiceType] = useState({
