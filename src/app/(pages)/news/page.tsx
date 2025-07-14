@@ -16,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { baseUrl } from "@/utility/config";
 
 interface NewsItem {
   id: string;
@@ -50,12 +51,12 @@ const NewsList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'date' | 'importance'>('date');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string|undefined>('all');
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/v1/news");
+        const response = await fetch(`${baseUrl}/news`);
         if (!response.ok) throw new Error("Failed to fetch news");
         const data = await response.json();
         setNewsItems(data?.data);
