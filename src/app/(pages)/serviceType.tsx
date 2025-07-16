@@ -1,20 +1,26 @@
-"use client";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
+"use client"
 
-// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from 'lucide-react';
+import React, { useState, useEffect } from "react"
+import axios from "axios"
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-  // RadioGroup,
-  // RadioGroupItem
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -23,239 +29,223 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { baseUrl } from '@/utility/config';
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from "lucide-react"
+import { baseUrl } from "@/utility/config"
 
 interface Service {
-  id?: string;
-  title: string;
-  shortDescription?: string;
-  description?: string;
-  phoneNumber?: string;
-  type?: string;
-  url?: string;
-  imageUrl?: string;
-  isClikableLink: boolean;
-  serviceId: string; // Foreign key
+  id?: string
+  title: string
+  shortDescription?: string
+  description?: string
+  phoneNumber?: string
+  type?: string
+  url?: string
+  imageUrl?: string
+  isClikableLink: boolean
+  serviceId: string
 }
-// let bannerImage: string[] = [];
+
 interface ServiceType {
-  id?: string;
-  title: string;
-  imageUrl?: string;
-  type: string;
-  isLottie: boolean,
-  bannerImage: string[];
-  serviceList: Service[];
-  isOpen: boolean;
+  id?: string
+  title: string
+  imageUrl?: string
+  type: string
+  isLottie: boolean
+  bannerImage: string[]
+  serviceList: Service[]
+  isOpen: boolean
 }
-// interface ServiceTypeData {
 
-//   title: string;
-//   imageUrl?: string;
-//   type: string;
-//   isLottie: boolean,
-//   bannerImage?: string[];
-
-// }
-const ServiceTypeManager = () => {
-  const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
-  const [newServiceType, setNewServiceType] = useState({
-    title: '',
-    imageUrl: '',
+const ServiceTypeManager: React.FC = () => {
+  const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([])
+  const [newServiceType, setNewServiceType] = useState<Omit<ServiceType, "id" | "serviceList" | "isOpen">>({
+    title: "",
+    imageUrl: "",
     isLottie: false,
     type: "card",
-    bannerImage: []
+    bannerImage: [],
+  })
 
-  });
   const [newService, setNewService] = useState<Service>({
     isClikableLink: false,
-    serviceId: '',
-    title: '',
-    shortDescription: '',
-    description: '',
-    phoneNumber: '',
-    type: '',
-    url: '',
-    imageUrl: ''
-  });
-  const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
-  const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(false);
-  const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
-  const [isClikableLink, setIsClikableLink] = useState<boolean>(false);
-  // Fetch service types and services from the API
+    serviceId: "",
+    title: "",
+    shortDescription: "",
+    description: "",
+    phoneNumber: "",
+    type: "",
+    url: "",
+    imageUrl: "",
+  })
+
+  const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null)
+  const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(false)
+  const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false)
+  const [isClikableLink, setIsClikableLink] = useState(false)
+
   useEffect(() => {
     const fetchServiceTypes = async () => {
       try {
-        const response = await fetch(`${baseUrl}/services`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch service types');
-        }
-        const data = await response.json();
-        const serviceTypesWithToggle = data?.data?.map((type: ServiceType) => ({
+        const response = await fetch(`${baseUrl}/services`)
+        if (!response.ok) throw new Error("Failed to fetch service types")
+
+        const data = await response.json()
+        const formatted: ServiceType[] = data?.data?.map((type: any) => ({
           ...type,
           isOpen: false,
-        }));
-        setServiceTypes(serviceTypesWithToggle);
+        }))
+        setServiceTypes(formatted)
       } catch (error) {
-        console.error('Error fetching service types:', error);
+        console.error("Error fetching service types:", error)
       }
-    };
+    }
 
-    fetchServiceTypes();
-  }, []);
+    fetchServiceTypes()
+  }, [])
 
   const toggleServiceType = (typeId: string) => {
-    setServiceTypes(serviceTypes.map(type => ({
-      ...type,
-      isOpen: type.id === typeId ? !type.isOpen : type.isOpen
-    })));
-  };
-  const handleTypeChange = (e: any) => {
-    const selectedType = e.target.value;
-    setNewServiceType(prevState => ({
-      ...prevState,
+    setServiceTypes((prev) =>
+      prev.map((type) =>
+        type.id === typeId ? { ...type, isOpen: !type.isOpen } : type
+      )
+    )
+  }
+
+  const handleTypeChange = (selectedType: string) => {
+    setNewServiceType((prev) => ({
+      ...prev,
       type: selectedType,
-      bannerImage: selectedType === 'banner' ? prevState.bannerImage : []
-    }));
-  };
+      bannerImage: selectedType === "banner" ? prev.bannerImage : [],
+    }))
+  }
+
   const handleAddServiceType = async () => {
-    if (newServiceType.title.trim()) {
-      setServiceTypes([
-        ...serviceTypes,
+    if (!newServiceType.title.trim()) return
+
+    try {
+      const response = await fetch(`${baseUrl}/services/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newServiceType),
+      })
+
+      if (!response.ok) throw new Error("Failed to submit service")
+
+      const created = await response.json()
+      setServiceTypes((prev) => [
+        ...prev,
         {
-          // id: serviceTypes.length + 1,
-          title: newServiceType.title,
-          bannerImage: newServiceType.bannerImage,
-          type: newServiceType.type,
-          isLottie: newServiceType.isLottie,
+          ...newServiceType,
+          id: created.data.id,
           serviceList: [],
-          isOpen: false
-        }
-      ]);
-      try {
-        const response = await fetch(`${baseUrl}/services/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newServiceType),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to submit service');
-        }
-
-        const result = await response.json();
-        console.log('Service submitted successfully:', result);
-
-
-        setIsServiceDialogOpen(false);
-      } catch (error) {
-        console.error('Error submitting service:', error);
-      }
+          isOpen: false,
+        },
+      ])
       setNewServiceType({
-        title: '',
-        imageUrl: '',
+        title: "",
+        imageUrl: "",
         type: "card",
         isLottie: false,
-        bannerImage: []
-      });
-      setIsTypeDialogOpen(false);
+        bannerImage: [],
+      })
+      setIsTypeDialogOpen(false)
+    } catch (err) {
+      console.error("Error submitting service:", err)
     }
-  };
+  }
 
   const handleAddService = async () => {
-    if (newService.title.trim() && selectedTypeId) {
-      // Set the serviceTypeId in the newService object
-      const serviceToSubmit = {
-        ...newService,
-        isClikableLink: isClikableLink,
-        isInternalUrl: false,
-        serviceId: selectedTypeId.toString(), // Ensure it's a string
-      };
+    if (!newService.title.trim() || !selectedTypeId) return
 
-      // Submit to API
-      try {
-        const response = await fetch(`${baseUrl}/services-list/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(serviceToSubmit),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to submit service');
-        }
-
-        const result = await response.json();
-        console.log('Service submitted successfully:', result);
-
-        // Update the UI with the new service
-        const updatedServiceTypes = serviceTypes.map(type => {
-          if (type.id === selectedTypeId) {
-            return {
-              ...type,
-              services: [
-                ...type.serviceList,
-                { ...serviceToSubmit, }
-              ]
-            };
-          }
-          return type;
-        });
-
-        setServiceTypes(updatedServiceTypes);
-        setNewService({
-          isClikableLink: false,
-          serviceId: '',
-          title: '',
-          shortDescription: '',
-          description: '',
-          phoneNumber: '',
-          type: '',
-          url: '',
-          imageUrl: ''
-        });
-        setIsServiceDialogOpen(false);
-      } catch (error) {
-        console.error('Error submitting service:', error);
-      }
+    const payload = {
+      ...newService,
+      isClikableLink,
+      isInternalUrl: false,
+      serviceId: selectedTypeId,
     }
-  };
 
-  const handleDeleteServiceType = (typeId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    axios.delete(`${baseUrl}/services/${typeId}`)
-      .then(response => {
-        console.log('Service type deleted successfully:', response.data);
+    try {
+      const response = await fetch(`${baseUrl}/services-list/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       })
-    setServiceTypes(serviceTypes.filter(type => type.id !== typeId));
-  };
 
-  const handleDeleteService = (typeId: string, serviceId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    console.log('Deleting service:', serviceId, 'from type:', typeId);
-    axios.delete(`${baseUrl}/services-list/${serviceId}`)
-      .then(response => {
-        console.log('Service type deleted successfully:', response.data);
+      if (!response.ok) throw new Error("Failed to submit service")
+
+      const result = await response.json()
+      const updated = serviceTypes.map((type) =>
+        type.id === selectedTypeId
+          ? {
+              ...type,
+              serviceList: [...type.serviceList, result.data],
+            }
+          : type
+      )
+      setServiceTypes(updated)
+      setNewService({
+        isClikableLink: false,
+        serviceId: "",
+        title: "",
+        shortDescription: "",
+        description: "",
+        phoneNumber: "",
+        type: "",
+        url: "",
+        imageUrl: "",
       })
-    setServiceTypes(serviceTypes.map(type => {
-      if (type.id === typeId) {
-        return {
-          ...type,
-          services: type.serviceList.filter(service => service.id !== serviceId)
-        };
-      }
-      return type;
-    }));
-  };
+      setIsServiceDialogOpen(false)
+    } catch (error) {
+      console.error("Error submitting service:", error)
+    }
+  }
+
+  const handleDeleteServiceType = async (
+    typeId: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation()
+    try {
+      await axios.delete(`${baseUrl}/services/${typeId}`)
+      setServiceTypes((prev) => prev.filter((type) => type.id !== typeId))
+    } catch (err) {
+      console.error("Failed to delete service type", err)
+    }
+  }
+
+  const handleDeleteService = async (
+    typeId: string,
+    serviceId: string,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation()
+    try {
+      await axios.delete(`${baseUrl}/services-list/${serviceId}`)
+      setServiceTypes((prev) =>
+        prev.map((type) =>
+          type.id === typeId
+            ? {
+                ...type,
+                serviceList: type.serviceList.filter((s) => s.id !== serviceId),
+              }
+            : type
+        )
+      )
+    } catch (err) {
+      console.error("Failed to delete service", err)
+    }
+  }
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
@@ -330,7 +320,7 @@ const ServiceTypeManager = () => {
                         const urls = e.target.value.split(',').map(url => url.trim()); // Split by commas and trim whitespace
                         setNewServiceType({
                           ...newServiceType,
-                          //@ts-ignore
+                          
                           bannerImage: urls,
                         });
                       }}
