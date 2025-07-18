@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       'example.com',  // Replace with the allowed image domains
       'anotherdomain.com',
       'cdn.example.com',
-      '*.com',
+      '*.com/*',
        '**'
     ],
   },
