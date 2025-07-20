@@ -1,5 +1,6 @@
 "use client";
 import TouristSpotDetail from "@/components/page/TouristSpotDetail";
+import { baseUrl } from "@/utility/config";
 import { useEffect, useState } from "react";
 
 export interface TouristSpot {
@@ -16,7 +17,7 @@ export interface TouristSpot {
 }
 
 interface PageProps {
-  params: { slug: string };
+  params: { id: string };
 }
 
  const TouristSpotPage=({ params }: PageProps)=> {
@@ -27,10 +28,10 @@ interface PageProps {
   useEffect(() => {
     async function fetchSpot() {
       try {
-        // const res = await fetch(`/api/tourist-spot/${params.slug}`);
-        // if (!res.ok) throw new Error("Failed to fetch");
-        // const data = await res.json();
-        // setSpot(data);
+        const res = await fetch(`${baseUrl}/tourist-spot/${params.id}`);
+        if (!res.ok) throw new Error("Failed to fetch");
+        const data = await res.json();
+        setSpot(data);
       } catch {
         setError("Failed to load tourist spot");
       } finally {
@@ -39,7 +40,7 @@ interface PageProps {
     }
 
     fetchSpot();
-  }, [params.slug]);
+  }, [params.id]);
 
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (error) return <div className="text-center mt-10 text-red-600">{error}</div>;

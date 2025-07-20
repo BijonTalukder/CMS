@@ -7,10 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { baseUrl } from '@/utility/config'
-import { useToast } from '@/hooks/use-toast'
-// import { useToast } from '@/components/ui/use-toast'
 
-// const baseUrl = 'https://your-domain.com' // Replace with actual
 
 const CreateNewsForm = () => {
   const [formData, setFormData] = useState({
@@ -39,7 +36,7 @@ const CreateNewsForm = () => {
     imageAltText: '',
   })
 
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -67,16 +64,16 @@ const CreateNewsForm = () => {
         }),
       })
 
-      const result = await res.json()
+      // const result = await res.json()
 
       if (res.ok) {
-        toast({ title: 'Success', description: 'News created successfully' })
+        // toast({ title: 'Success', description: 'News created successfully' })
         setFormData((prev) => ({ ...prev, title: '', slug: '', tags: '', shortDescription: '', description: '' }))
       } else {
-        toast({ title: 'Error', description: result.message || 'Something went wrong', variant: 'destructive' })
+        // toast({ title: 'Error', description: result.message || 'Something went wrong', variant: 'destructive' })
       }
     } catch (error) {
-      toast({ title: 'Error', description: String(error), variant: 'destructive' })
+      // toast({ title: 'Error', description: String(error), variant: 'destructive' })
     }
   }
 

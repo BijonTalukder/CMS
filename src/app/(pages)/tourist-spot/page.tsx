@@ -5,6 +5,7 @@ import { Search, MapPin, Star, Clock, DollarSign, Menu } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import Image from "next/image";
 import { baseUrl } from "@/utility/config";
+import Link from "next/link";
 
 interface Service {
   id: string;
@@ -30,7 +31,7 @@ const TouristSpots: React.FC = () => {
           `${baseUrl}/services-list/services/67b435893c57d49ee64a0fbc`
         );
         const data = await response.json();
-        setSpots(data.data); // Ensure your API response structure matches this
+        setSpots(data.data); 
       } catch (error) {
         console.error("Error fetching services:", error);
       } finally {
@@ -87,8 +88,10 @@ const TouristSpots: React.FC = () => {
         ) : (
           <div className="grid gap-4">
             {filteredSpots.map((spot) => (
-              <Card
-                key={spot.id}
+
+              <Link  key={spot.id} href={`/tourist-spot/${spot.id}`}>
+                   <Card
+              
                 className="overflow-hidden hover:shadow-lg transition-shadow active:scale-[0.99]"
               >
                 <div className="flex flex-col">
@@ -131,7 +134,8 @@ const TouristSpots: React.FC = () => {
                     </CardContent>
                   </div>
                 </div>
-              </Card>
+              </Card></Link>
+         
             ))}
           </div>
         )}

@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/select"
 import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from "lucide-react"
 import { baseUrl } from "@/utility/config"
+import { useRouter } from "next/navigation"
 
 interface Service {
   id?: string
@@ -68,6 +69,7 @@ interface ServiceType {
 }
 
 const ServiceTypeManager: React.FC = () => {
+  const router = useRouter();
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([])
   const [newServiceType, setNewServiceType] = useState<Omit<ServiceType, "id" | "serviceList" | "isOpen">>({
     title: "",
@@ -188,9 +190,9 @@ const ServiceTypeManager: React.FC = () => {
       const updated = serviceTypes.map((type) =>
         type.id === selectedTypeId
           ? {
-              ...type,
-              serviceList: [...type.serviceList, result.data],
-            }
+            ...type,
+            serviceList: [...type.serviceList, result.data],
+          }
           : type
       )
       setServiceTypes(updated)
@@ -236,9 +238,9 @@ const ServiceTypeManager: React.FC = () => {
         prev.map((type) =>
           type.id === typeId
             ? {
-                ...type,
-                serviceList: type.serviceList.filter((s) => s.id !== serviceId),
-              }
+              ...type,
+              serviceList: type.serviceList.filter((s) => s.id !== serviceId),
+            }
             : type
         )
       )
@@ -320,7 +322,7 @@ const ServiceTypeManager: React.FC = () => {
                         const urls = e.target.value.split(',').map(url => url.trim()); // Split by commas and trim whitespace
                         setNewServiceType({
                           ...newServiceType,
-                          
+
                           bannerImage: urls,
                         });
                       }}
@@ -571,7 +573,17 @@ const ServiceTypeManager: React.FC = () => {
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
-   
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => {
+                              if (type.id) {
+                                router.push(`/details/create/${type.id}`);
+                              }
+                            }}
+                          >
+                            Create Details Page
+                          </Button>
                         </div>
                       ))}
                     </div>
