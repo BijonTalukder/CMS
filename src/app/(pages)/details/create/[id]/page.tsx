@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import "react-quill/dist/quill.snow.css";
 import { baseUrl } from "@/utility/config";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -64,7 +63,7 @@ export default function CreateServiceDetail() {
         readTimeMinutes: form.readTimeMinutes,
       };
 
-      const res = await fetch(`${baseUrl}/service-details/create`, {
+      const res = await fetch(`${baseUrl}/service-list-details/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

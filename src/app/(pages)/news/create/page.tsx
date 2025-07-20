@@ -73,6 +73,7 @@ const CreateNewsForm = () => {
         // toast({ title: 'Error', description: result.message || 'Something went wrong', variant: 'destructive' })
       }
     } catch (error) {
+      console.error('Error creating news:', error)
       // toast({ title: 'Error', description: String(error), variant: 'destructive' })
     }
   }
