@@ -5,6 +5,7 @@ import { Search, MapPin, Star, Clock, DollarSign, Menu } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import Image from "next/image";
 import { baseUrl } from "@/utility/config";
+import Link from "next/link";
 
 interface Service {
   id: string;
@@ -17,7 +18,7 @@ interface Service {
   description: string;
 }
 
-const TouristSpots: React.FC = () => {
+const TouristSpotsList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [spots, setSpots] = useState<Service[]>([]);
@@ -30,9 +31,7 @@ const TouristSpots: React.FC = () => {
           `${baseUrl}/services-list/services/67b435893c57d49ee64a0fbc`
         );
         const data = await response.json();
-        console.log(data);
-        
-        setSpots(data.services); // Ensure your API response structure matches this
+        setSpots(data.data); 
       } catch (error) {
         console.error("Error fetching services:", error);
       } finally {
@@ -43,7 +42,7 @@ const TouristSpots: React.FC = () => {
     fetchServices();
   }, []);
 
-  const filteredSpots = spots?.filter(
+  const filteredSpots = spots.filter(
     (spot) =>
       spot.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       spot.shortDescription.toLowerCase().includes(searchTerm.toLowerCase())
@@ -89,8 +88,10 @@ const TouristSpots: React.FC = () => {
         ) : (
           <div className="grid gap-4">
             {filteredSpots.map((spot) => (
-              <Card
-                key={spot.id}
+
+              <Link  key={spot.id} href={`/tourist-spot/${spot.id}`}>
+                   <Card
+              
                 className="overflow-hidden hover:shadow-lg transition-shadow active:scale-[0.99]"
               >
                 <div className="flex flex-col">
@@ -98,6 +99,8 @@ const TouristSpots: React.FC = () => {
                     <img
                       src={spot.imageUrl}
                       alt={spot.title}
+                      height={200}
+                      width={200}
                       className="absolute h-full w-full object-cover"
                     />
                   </div>
@@ -131,7 +134,8 @@ const TouristSpots: React.FC = () => {
                     </CardContent>
                   </div>
                 </div>
-              </Card>
+              </Card></Link>
+         
             ))}
           </div>
         )}
@@ -140,4 +144,4 @@ const TouristSpots: React.FC = () => {
   );
 };
 
-export default TouristSpots;
+export default TouristSpotsList;

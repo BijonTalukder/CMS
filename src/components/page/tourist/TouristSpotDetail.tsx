@@ -1,8 +1,8 @@
 'use client';
 
 
-import { TouristSpot } from "@/app/(pages)/tourist-spot/[id]/page";
 import { Card, CardContent } from "@/components/ui/card";
+import { TouristSpot } from "./TouristSpotDetaiComponent";
 
 const TouristSpotDetail=({ spot }: { spot: TouristSpot })=> {
   return (
