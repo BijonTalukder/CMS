@@ -23,8 +23,11 @@ type ServiceDetail = {
   createdAt: string;
   updatedAt: string;
 };
+interface Props {
+  serviceListId: string;
+}
 
-const ContentDetailPage = ({ serviceListId }: { serviceListId: string }) => {
+const ContentDetailPage = ({ serviceListId }: Props) => {
   const [detail, setDetail] = useState<ServiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
