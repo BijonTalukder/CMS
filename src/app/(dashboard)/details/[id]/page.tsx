@@ -1,10 +1,6 @@
-// import ContentDetailPage from '@/components/page/content/ContentDetails';
 import ContentDetailPage from '@/components/page/content/ContentDetails';
 import React, { use } from 'react';
 
-// interface PageProps {
-//   params: { id: string };
-// }
 
 const Details = ({params}: {params: Promise<{ id: string }>}) => {
 

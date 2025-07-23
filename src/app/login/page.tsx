@@ -25,11 +25,12 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Loader2 } from "lucide-react"
+import { baseUrl } from "@/utility/config"
 
 // Define form schema with Zod
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+  password: z.string().min(2, { message: "Password must be at least 2 characters" }),
 })
 
 // Infer form data type from schema
@@ -51,16 +52,24 @@ export default function LoginPage() {
   // Handle form submission
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     setIsLoading(true)
-
     try {
-      // Simulate API call
-      console.log("Login attempt:", values)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
-      // On success
-      router.push("/dashboard")
+      const res = await fetch(`${baseUrl}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        console.log(data.token)
+        document.cookie = `token=${data.token}; path=/; httpOnly; secure; max-age=3600`;
+        // On success
+        router.push('/dashboard');
+      } else {
+        alert(data.error || 'Login failed');
+      }
     } catch (error) {
-      console.error("Login failed:", error)
+      alert('An error occurred during login.');
+      console.error('Login failed:', error);
     } finally {
       setIsLoading(false)
     }

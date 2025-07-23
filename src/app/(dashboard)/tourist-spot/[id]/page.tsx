@@ -1,4 +1,4 @@
-// app/tourist-spot/[id]/page.tsx
+
 import ContentDetailPage from '@/components/page/content/ContentDetails';
 import React from 'react';
 
