@@ -29,35 +29,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Link from 'next/link';
+import Sidebar from '@/components/shared/Sidebar';
 // import { Button } from "@/compone
 const DashboardLayout=({ children }: { children: React.ReactNode }) => {
- const navItems = [
-    { icon: <LayoutDashboard size={20} />, label: 'Dashboard', href: '#' },
-    { icon: <FileText size={20} />, label: 'Posts', href: '#' },
-    { icon: <Users size={20} />, label: 'Users', href: '#' },
-    { icon: <Settings size={20} />, label: 'Settings', href: '#' },
-  ];
-      const Sidebar = ({ className = "" }) => (
-    <div className={`pb-12 min-h-screen ${className}`}>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold">CMS Dashboard</h2>
-          <div className="space-y-1">
-            {navItems.map((item, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                className="w-full justify-start gap-2"
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+
 
     return (
     <div className="min-h-screen bg-background">

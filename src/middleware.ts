@@ -1,21 +1,27 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const token = request.cookies.get("token")?.value; // <- cookie থেকে নাও
+  const url = request.nextUrl.clone();
+  const { pathname } = url;
 
-  if (pathname.startsWith('/dashboard')) {
-    const token = request.cookies.get('token')?.value;
-    console.log(token)
-   
-    if (!token) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-   
-    return NextResponse.next();
+  // Protect /dashboard
+  if (pathname.startsWith("/dashboard") && !token) {
+    url.pathname = "/login";
+    url.searchParams.set("from", pathname); // চাইলে back redirect করতে পারো
+    return NextResponse.redirect(url);
   }
+
+  // If logged-in user hits /login, push him to /dashboard
+  if (pathname === "/login" && token) {
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
-}; 
+  matcher: ["/dashboard/:path*", "/login"],
+};

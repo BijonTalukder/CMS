@@ -61,7 +61,7 @@ export default function LoginPage() {
       const data = await res.json();
       if (res.ok) {
         console.log(data.token)
-        document.cookie = `token=${data.token}; path=/; httpOnly; secure; max-age=3600`;
+        document.cookie = `token=${data.token}; path=/; max-age=3600`;
         // On success
         router.push('/dashboard');
       } else {
