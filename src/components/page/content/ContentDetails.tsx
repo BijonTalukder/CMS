@@ -24,10 +24,10 @@ type ServiceDetail = {
   updatedAt: string;
 };
 interface Props {
-  serviceListId: string;
+  id: string;
 }
 
-const ContentDetailPage = ({ serviceListId }: Props) => {
+const ContentDetailPage = ({ id }:Props) => {
   const [detail, setDetail] = useState<ServiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ const ContentDetailPage = ({ serviceListId }: Props) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/service-list-details/${serviceListId}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/service-list-details/${id}`
         );
         setDetail(response.data.data);
       } catch (error) {
@@ -45,10 +45,10 @@ const ContentDetailPage = ({ serviceListId }: Props) => {
       }
     };
 
-    if (serviceListId) {
+    if (id) {
       fetchData();
     }
-  }, [serviceListId]);
+  }, [id]);
 
   if (loading)
     return (

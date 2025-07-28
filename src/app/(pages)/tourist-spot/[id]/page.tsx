@@ -7,7 +7,7 @@ const TouristSpotDetail = ({ params }: PageProps) => {
   
   return (
     <div>
-      <ContentDetailPage serviceListId={params.id} />
+      <ContentDetailPage id={params.id} />
     </div>
   )
 }
