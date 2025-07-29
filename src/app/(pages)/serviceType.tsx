@@ -578,7 +578,7 @@ const ServiceTypeManager: React.FC = () => {
                             size="sm"
                             onClick={() => {
                               if (type.id) {
-                                router.push(`/details/create/${type.id}`);
+                                router.push(`/dashboard/details/create/${service.id}`);
                               }
                             }}
                           >

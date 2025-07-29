@@ -11,7 +11,7 @@ const { id } = use(params);
 console.log("Tourist Spot ID:", id);
   return (
     <div>
-      <ContentDetailPage id={id} />
+      <ContentDetailPage serviceListId={id} />
     </div>
   );
 }

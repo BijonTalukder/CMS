@@ -1,5 +1,5 @@
 import React from 'react'
-import ServiceTypeManager from '../serviceType'
+import ServiceTypeManager from '../../(pages)/serviceType'
 
 const page = () => {
   return (
