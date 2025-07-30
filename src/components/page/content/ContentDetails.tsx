@@ -34,7 +34,7 @@ const ContentDetailPage = ({params}: {params: Promise<{ id: string }>}) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${baseUrl}/services-list/${id}`
+          `${baseUrl}/services-list/${params.id}`
         );
         setDetail(response.data.data);
       } catch (error) {
