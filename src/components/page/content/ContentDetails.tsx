@@ -1,4 +1,5 @@
 "use client";
+import { baseUrl } from "@/utility/config";
 
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +36,7 @@ const ContentDetailPage = ({ id }:Props) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/service-list-details/${id}`
+          `${baseUrl}/services-list/${id}`
         );
         setDetail(response.data.data);
       } catch (error) {
