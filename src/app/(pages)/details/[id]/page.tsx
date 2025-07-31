@@ -1,15 +1,14 @@
 
 import ContentDetailPage from "@/components/page/content/ContentDetails";
-import React from "react";
+import React, { use } from "react";
 
-interface PageProps {
-  params: { id: string };
-}
 
-const ServiceDetailsPage = ({ params }: PageProps)=> {
+
+const ServiceDetailsPage = ({params}: {params: Promise<{ id: string }>})=> {
+  const { id } = use(params);
   return (
     <div>
-      <ContentDetailPage id={params.id} />
+      <ContentDetailPage id={id} />
     </div>
   );
 };

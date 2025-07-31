@@ -1,6 +1,5 @@
 "use client";
 import { baseUrl } from "@/utility/config";
-
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,20 +24,18 @@ type ServiceDetail = {
   updatedAt: string;
 };
 
+const ContentDetailPage = ({id}:{id:string}) => {
 
-const ContentDetailPage = ({params}: {params: Promise<{ id: string }>}) => {
   const [detail, setDetail] = useState<ServiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${baseUrl}/services-list/${params.id}`
-        );
+        const response = await axios.get(`${baseUrl}/services-list/${id}`);
         setDetail(response.data.data);
       } catch (error) {
-        console.error(error);
+        console.error("Failed to fetch content detail:", error);
       } finally {
         setLoading(false);
       }
@@ -71,7 +68,7 @@ const ContentDetailPage = ({params}: {params: Promise<{ id: string }>}) => {
           <span>👁️ {detail.views ?? 0} views</span>
           <span>👍 {detail.upVotes ?? 0}</span>
           <span>👎 {detail.downVotes ?? 0}</span>
-          <span>📅 {detail.createdAt}</span>
+          <span>📅 {new Date(detail.createdAt).toLocaleDateString()}</span>
         </div>
 
         {detail.tags?.length > 0 && (

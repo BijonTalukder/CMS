@@ -8,7 +8,7 @@ const { id } = use(params);
 
   return (
     <div>
-      <ContentDetailPage serviceListId={id} />
+      <ContentDetailPage id={id} />
     </div>
   );
 };

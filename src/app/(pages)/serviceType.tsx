@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/select"
 import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from "lucide-react"
 import { baseUrl } from "@/utility/config"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
 
 interface Service {
   id?: string
@@ -55,6 +55,10 @@ interface Service {
   imageUrl?: string
   isClikableLink: boolean
   serviceId: string
+  //to do,addd to added service create
+  isTouristSpot?: boolean
+  contentHtml?: string
+
 }
 
 interface ServiceType {
@@ -69,7 +73,7 @@ interface ServiceType {
 }
 
 const ServiceTypeManager: React.FC = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([])
   const [newServiceType, setNewServiceType] = useState<Omit<ServiceType, "id" | "serviceList" | "isOpen">>({
     title: "",
@@ -88,6 +92,8 @@ const ServiceTypeManager: React.FC = () => {
     phoneNumber: "",
     type: "",
     url: "",
+    isTouristSpot: false,
+    contentHtml: "",
     imageUrl: "",
   })
 
@@ -95,7 +101,7 @@ const ServiceTypeManager: React.FC = () => {
   const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(false)
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false)
   const [isClikableLink, setIsClikableLink] = useState(false)
-
+const [isTouristSpot, setIsTouristSpot] = useState(false)
   useEffect(() => {
     const fetchServiceTypes = async () => {
       try {
@@ -173,6 +179,7 @@ const ServiceTypeManager: React.FC = () => {
     const payload = {
       ...newService,
       isClikableLink,
+      isTouristSpot,
       isInternalUrl: false,
       serviceId: selectedTypeId,
     }
@@ -205,6 +212,8 @@ const ServiceTypeManager: React.FC = () => {
         phoneNumber: "",
         type: "",
         url: "",
+    isTouristSpot: false,
+    contentHtml: "",
         imageUrl: "",
       })
       setIsServiceDialogOpen(false)
@@ -442,6 +451,7 @@ const ServiceTypeManager: React.FC = () => {
                               className="col-span-3"
                             />
                           </div>
+                            
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="description" className="text-right">
                               Description
@@ -450,6 +460,18 @@ const ServiceTypeManager: React.FC = () => {
                               id="description"
                               value={newService.description}
                               onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+                              className="col-span-3"
+                            />
+                          </div>
+                           <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="contentHtml" className="text-right">
+                              
+                              content html
+                            </Label>
+                            <Input
+                              id="description"
+                              value={newService.contentHtml}
+                              onChange={(e) => setNewService({ ...newService, contentHtml: e.target.value })}
                               className="col-span-3"
                             />
                           </div>
@@ -464,6 +486,8 @@ const ServiceTypeManager: React.FC = () => {
                               className="col-span-3"
                             />
                           </div>
+
+
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="type" className="text-right">
                               Type
@@ -475,6 +499,28 @@ const ServiceTypeManager: React.FC = () => {
                               className="col-span-3"
                             />
                           </div>
+
+
+ <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="isTouristSpot" className="text-right">
+                              Is TouristSpot 
+                            </Label>
+                            <RadioGroup
+                              defaultValue="option-two"
+                              onValueChange={(value) => setIsTouristSpot(value === "option-one")}
+                            >
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="option-one" id="option-one" />
+                                <Label htmlFor="option-one">Yes</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="option-two" id="option-two" />
+                                <Label htmlFor="option-two">No</Label>
+                              </div>
+                            </RadioGroup>
+
+                          </div>
+
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="isClikableLink" className="text-right">
                               Is Clikable Link
@@ -507,17 +553,7 @@ const ServiceTypeManager: React.FC = () => {
                               />
                             </div>
                           )}
-                          {/* <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="url" className="text-right">
-                              URL
-                            </Label>
-                            <Input
-                              id="url"
-                              value={newService.url}
-                              onChange={(e) => setNewService({ ...newService, url: e.target.value })}
-                              className="col-span-3"
-                            />
-                          </div> */}
+                         
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="imageUrl" className="text-right">
                               Image URL
@@ -573,7 +609,7 @@ const ServiceTypeManager: React.FC = () => {
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
-                          <Button
+                          {/* <Button
                             variant="secondary"
                             size="sm"
                             onClick={() => {
@@ -583,7 +619,7 @@ const ServiceTypeManager: React.FC = () => {
                             }}
                           >
                             Create Details Page
-                          </Button>
+                          </Button> */}
                         </div>
                       ))}
                     </div>
