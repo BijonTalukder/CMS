@@ -9,9 +9,10 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import axios from 'axios'
 import { baseUrl } from '@/utility/config'
+import Link from 'next/link'
 
 type ServiceArea = {
-  _id: string
+  id: string
   name: string
   description?: string
   status: boolean
@@ -101,7 +102,9 @@ const ServiceAreaPage=()=> {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {areas.map((area) => (
-          <Card key={area._id}>
+
+          <Link key={area.id} href={`/dashboard/service-area/${area.id}`}>
+            <Card key={area.id}>
             <CardHeader>
               <CardTitle>{area.name}</CardTitle>
             </CardHeader>
@@ -112,12 +115,14 @@ const ServiceAreaPage=()=> {
                 <Button size="sm" variant="outline">
                   Edit
                 </Button>
-                <Button size="sm" variant="destructive" onClick={() => handleDelete(area._id)}>
+                <Button size="sm" variant="destructive" onClick={() => handleDelete(area.id)}>
                   Delete
                 </Button>
               </div>
             </CardContent>
           </Card>
+          </Link>
+        
         ))}
       </div>
     </div>

@@ -71,8 +71,10 @@ interface ServiceType {
   serviceList: Service[]
   isOpen: boolean
 }
-
-const ServiceTypeManager: React.FC = () => {
+interface ServiceTypeManagerProps {
+  id: string;
+}
+const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
   // const router = useRouter();
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([])
   const [newServiceType, setNewServiceType] = useState<Omit<ServiceType, "id" | "serviceList" | "isOpen">>({
@@ -105,7 +107,7 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
   useEffect(() => {
     const fetchServiceTypes = async () => {
       try {
-        const response = await fetch(`${baseUrl}/services`)
+        const response = await fetch(`${baseUrl}/services/service-area/${id}`)
         if (!response.ok) throw new Error("Failed to fetch service types")
 
         const data = await response.json()
@@ -120,7 +122,7 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
     }
 
     fetchServiceTypes()
-  }, [])
+  }, [id])
 
   const toggleServiceType = (typeId: string) => {
     setServiceTypes((prev) =>
