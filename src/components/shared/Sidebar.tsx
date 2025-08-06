@@ -16,7 +16,9 @@ const navItems = [
   { icon: <LayoutDashboard size={20} />, label: 'Dashboard', href: '/dashboard' },
   { icon: <FileText size={20} />, label: 'Tourist Spot', href: '/dashboard/tourist-spot' },
   { icon: <FileText size={20} />, label: 'News', href: '/dashboard/news' },
-  { icon: <FileText size={20} />, label: 'Breaking News', href: '/dashboard/breaking-news' },
+  { icon: <FileText size={20} />,
+   label: 'Breaking News',
+   href: '/dashboard/breaking-news' },
   {
     icon: <Users size={20} />,
     label: 'Users',

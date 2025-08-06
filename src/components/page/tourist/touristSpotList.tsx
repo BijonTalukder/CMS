@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, MapPin, Star, Clock, DollarSign, Menu } from "lucide-react";
+import { Search, MapPin, Star, Clock, Menu, ChevronRight, X, Filter } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import Image from "next/image";
 import { baseUrl } from "@/utility/config";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Service {
   id: string;
@@ -21,6 +21,7 @@ interface Service {
 const TouristSpotsList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [spots, setSpots] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,98 +49,178 @@ const TouristSpotsList: React.FC = () => {
       spot.shortDescription.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const renderPriceLevel = (level: number) => {
-    return [...Array(level)].map((_, i) => (
-      <DollarSign key={i} className="w-4 h-4 inline text-green-600" />
-    ));
+  const clearSearch = () => {
+    setSearchTerm("");
+    setIsSearchFocused(false);
   };
 
   return (
     <div className="max-w-4xl mx-auto bg-white min-h-screen">
-      {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 bg-white z-10 border-b">
-        <div className="p-4">
+      {/* App-like header with status bar spacer */}
+      <div className="fixed top-0 left-0 right-0 z-20 bg-white">
+        {/* Fake status bar for mobile */}
+        {/* <div className="h-6 bg-gray-100 md:hidden"></div> */}
+        
+        {/* Search header */}
+        <header className={`p-4 border-b shadow-sm transition-all ${isSearchFocused ? 'md:bg-white bg-white' : 'bg-white'}`}>
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-bold">Tourist Spots</h1>
+            {!isSearchFocused && (
+              <h1 className="text-xl font-bold text-gray-800">Explore </h1>
+            )}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-full hover:bg-gray-100 md:hidden"
+              className={`p-2 rounded-full hover:bg-gray-100 md:hidden ${isSearchFocused ? 'hidden' : 'block'}`}
+              aria-label="Menu"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-6 h-6 text-gray-600" />
             </button>
           </div>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search spots..."
-              className="w-full pl-10 pr-4 py-3 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Search by name or location..."
+              className="w-full pl-10 pr-10 py-3 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
+              aria-label="Search tourist spots"
             />
+            {searchTerm && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                aria-label="Clear search"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
           </div>
+        </header>
+      </div>
+
+      {/* Filter chips (mobile app style) */}
+      <div className="fixed top-[150px] z-10 w-full bg-white pt-2 px-4 pb-2 overflow-x-auto no-scrollbar md:hidden">
+        <div className="flex space-x-2">
+          <button className="flex items-center whitespace-nowrap px-3 py-1.5 bg-gray-100 rounded-full text-sm font-medium">
+            <Filter className="w-4 h-4 mr-1" />
+            Popular
+          </button>
+          <button className="whitespace-nowrap px-3 py-1.5 bg-gray-100 rounded-full text-sm font-medium">
+            Nearby
+          </button>
+          <button className="whitespace-nowrap px-3 py-1.5 bg-gray-100 rounded-full text-sm font-medium">
+            Top Rated
+          </button>
+          <button className="whitespace-nowrap px-3 py-1.5 bg-gray-100 rounded-full text-sm font-medium">
+            Free Entry
+          </button>
         </div>
       </div>
 
       {/* Main Content with Padding for Fixed Header */}
-      <div className="pt-32 px-4 pb-4">
+      <main className={`pt-[200px] pb-20 px-4 ${isSearchFocused ? 'mt-0' : 'mt-0'}`}>
         {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
-        ) : (
           <div className="grid gap-4">
-            {filteredSpots.map((spot) => (
-
-              <Link  key={spot.id} href={`/tourist-spot/${spot.id}`}>
-                   <Card
-              
-                className="overflow-hidden hover:shadow-lg transition-shadow active:scale-[0.99]"
-              >
-                <div className="flex flex-col">
-                  <div className="relative h-48 sm:h-64">
-                    <img
-                      src={spot.imageUrl}
-                      alt={spot.title}
-                      height={200}
-                      width={200}
-                      className="absolute h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <CardHeader className="p-0">
-                      <CardTitle className="text-lg font-bold mb-2">
-                        {spot.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      <div className="flex items-center gap-2 text-gray-600 mb-2 text-sm">
-                        <MapPin className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate">{spot.shortDescription}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-3 mb-3 text-sm">
-                        <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-full">
-                          <Star className="w-4 h-4 text-yellow-500" />
-                          <span>{spot.rating}</span>
-                        </div>
-                        <div className="flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-full">
-                          <Clock className="w-4 h-4 text-blue-500" />
-                          <span>{spot.visitDuration}</span>
-                        </div>
-                        <div className="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-full">
-                          {renderPriceLevel(spot.priceLevel)}
-                        </div>
-                      </div>
-                      <p className="text-gray-600 text-sm line-clamp-2">
-                        {spot.description}
-                      </p>
-                    </CardContent>
+            {[...Array(5)].map((_, i) => (
+              <Card key={i} className="overflow-hidden border-none shadow-md">
+                <div className="flex">
+                  <Skeleton className="h-24 w-24 rounded-lg" />
+                  <div className="ml-4 flex-1">
+                    <Skeleton className="h-5 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-full mb-1" />
+                    <Skeleton className="h-4 w-1/2" />
                   </div>
                 </div>
-              </Card></Link>
-         
+              </Card>
+            ))}
+          </div>
+        ) : filteredSpots.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <Search className="w-12 h-12 text-gray-400 mb-4" />
+            <h2 className="text-lg font-medium text-gray-700">
+              No spots found
+            </h2>
+            <p className="text-gray-500 mt-2">
+              Try adjusting your search or filter
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-3 md:gap-6">
+            {filteredSpots.map((spot) => (
+              <Link key={spot.id} href={`/tourist-spot/${spot.id}`} passHref>
+                <Card className="overflow-hidden border-none shadow-md active:scale-95 transition-transform">
+                  <div className="flex">
+                    <div className="relative h-24 w-24 flex-shrink-0">
+                      <img
+                        src={spot.imageUrl}
+                        alt={spot.title}
+                        className="absolute h-full w-full object-cover rounded-lg"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="ml-4 flex-1 py-1">
+                      <CardHeader className="p-0">
+                        <CardTitle className="text-base font-bold text-gray-800 line-clamp-1">
+                          {spot.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-0 mt-1">
+                        <div className="flex items-center gap-1 text-gray-600 mb-1 text-xs">
+                          <MapPin className="w-3 h-3 flex-shrink-0" />
+                          <span className="line-clamp-1">{spot.shortDescription}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 mt-2">
+                          <div className="flex items-center gap-1 bg-yellow-50 px-2 py-0.5 rounded-full text-xs">
+                            <Star className="w-3 h-3 text-yellow-500" />
+                            <span className="font-medium text-gray-700">{spot.rating}</span>
+                          </div>
+                          <div className="flex items-center gap-1 bg-blue-50 px-2 py-0.5 rounded-full text-xs">
+                            <Clock className="w-3 h-3 text-blue-500" />
+                            <span className="text-gray-700">{spot.visitDuration}</span>
+                          </div>
+                        </div>
+                        
+                        <p className="text-gray-600 text-xs line-clamp-2 mt-1">
+                          {spot.description}
+                        </p>
+                      </CardContent>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-300 mt-1 mr-1" />
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
         )}
-      </div>
+      </main>
+
+      {/* Bottom navigation bar (mobile app style) */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg md:hidden z-20">
+        <div className="flex justify-around py-3">
+          <button className="flex flex-col items-center text-blue-500">
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
+            <span className="text-xs mt-1">Explore</span>
+          </button>
+          <button className="flex flex-col items-center text-gray-500">
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+              <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+            </svg>
+            <span className="text-xs mt-1">Saved</span>
+          </button>
+          <button className="flex flex-col items-center text-gray-500">
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+            </svg>
+            <span className="text-xs mt-1">Profile</span>
+          </button>
+        </div>
+      </nav>
     </div>
   );
 };
