@@ -12,7 +12,7 @@ type ServiceDetail = {
   title: string;
   slug: string;
   type: string;
-  coverImage: string;
+  imageUrl: string;
   contentHtml: string;
   metaDescription?: string;
   tags: string[];
@@ -63,7 +63,7 @@ const ContentDetailPage = ({id}:{id:string}) => {
         <h1 className="text-3xl font-bold mb-2">{detail.title}</h1>
 
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-4">
-          <Badge variant="secondary">{detail.type}</Badge>
+          {/* <Badge variant="secondary">{detail.type}</Badge> */}
           {detail.readTimeMinutes && <Badge>{detail.readTimeMinutes} min read</Badge>}
           <span>👁️ {detail.views ?? 0} views</span>
           <span>👍 {detail.upVotes ?? 0}</span>
@@ -82,7 +82,7 @@ const ContentDetailPage = ({id}:{id:string}) => {
         )}
 
         <img
-          src={detail.coverImage}
+          src={detail.imageUrl}
           alt={detail.title}
           className="w-full rounded-lg object-cover max-h-96 mb-6"
         />

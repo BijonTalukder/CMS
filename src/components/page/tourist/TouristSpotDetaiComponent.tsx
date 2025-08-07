@@ -10,7 +10,7 @@ export interface TouristSpot {
   location: string;
   author: string;
   date: string;
-  coverImage: string;
+  imageUrl: string;
   contentHtml: string;
   metaDescription?: string;
   tags: string[];
@@ -41,7 +41,7 @@ export interface TouristSpot {
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (error) return <div className="text-center mt-10 text-red-600">{error}</div>;
   if (!spot) return <div className="text-center mt-10">Tourist spot not found</div>;
-
+console.log("Tourist Spot Data:", spot);
   return <TouristSpotDetail spot={spot} />;
 }
 export default TouristSpotsDetailsComponent;

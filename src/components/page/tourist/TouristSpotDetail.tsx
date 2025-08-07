@@ -9,7 +9,7 @@ const TouristSpotDetail=({ spot }: { spot: TouristSpot })=> {
     <div className="max-w-3xl mx-auto py-10">
       <Card>
         <img
-          src={spot.coverImage}
+          src={spot.imageUrl}
           alt={spot.title}
           className="rounded-t-2xl w-full object-cover h-[300px]"
         />

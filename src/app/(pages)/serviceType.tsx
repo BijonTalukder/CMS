@@ -50,7 +50,7 @@ interface Service {
   shortDescription?: string
   description?: string
   phoneNumber?: string
-  type?: "sectionCardOne" | "sectionCardTwo" | "sectionCardThree" | "sectionCardFour" 
+  type?: "sectionCardOne" | "sectionCardTwo" | "sectionCardThree" | "sectionCardFour"
   url?: string
   imageUrl?: string
   isClikableLink: boolean
@@ -74,7 +74,7 @@ interface ServiceTypeManagerProps {
   id: string;
 }
 
-const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
+const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({ id }) => {
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([])
   const [newServiceType, setNewServiceType] = useState<Omit<ServiceType, "id" | "serviceList" | "isOpen">>({
     title: "",
@@ -271,7 +271,7 @@ const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
 
   const renderServiceFields = () => {
     const serviceType = newService.type
-    
+
     return (
       <>
         {/* Title - Always shown */}
@@ -302,7 +302,7 @@ const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
                 className="col-span-3"
               />
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="description" className="text-right">
                 Description
@@ -343,7 +343,7 @@ const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
                 className="col-span-3"
               />
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="description" className="text-right">
                 Description
@@ -396,7 +396,7 @@ const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
                 className="col-span-3"
               />
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="description" className="text-right">
                 Description
@@ -622,11 +622,11 @@ const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
 
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="isLottie" className="text-right">Is Lottie?</Label>
-                 
-                   <Checkbox id="isLottie"
-                  checked={newServiceType.isLottie}
-      onCheckedChange={(checked) => setNewServiceType({ ...newServiceType, isLottie: !!checked })}
-                     aria-label='Size default' />
+
+                  <Checkbox id="isLottie"
+                    checked={newServiceType.isLottie}
+                    onCheckedChange={(checked) => setNewServiceType({ ...newServiceType, isLottie: !!checked })}
+                    aria-label='Size default' />
                   {/* <Input
                     id="isLottie"
                     type="checkbox"
