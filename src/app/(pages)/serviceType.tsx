@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/select"
 import { PlusCircle, ChevronDown, ChevronRight, Trash2 } from "lucide-react"
 import { baseUrl } from "@/utility/config"
-// import { useRouter } from "next/navigation"
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface Service {
   id?: string
@@ -50,32 +50,31 @@ interface Service {
   shortDescription?: string
   description?: string
   phoneNumber?: string
-  type?: string
+  type?: "sectionCardOne" | "sectionCardTwo" | "sectionCardThree" | "sectionCardFour" 
   url?: string
   imageUrl?: string
   isClikableLink: boolean
   serviceId: string
-  //to do,addd to added service create
   isTouristSpot?: boolean
   contentHtml?: string
-
 }
 
 interface ServiceType {
   id?: string
   title: string
   imageUrl?: string
-  type: string
+  type: "card" | "banner"
   isLottie: boolean
   bannerImage: string[]
   serviceList: Service[]
   isOpen: boolean
 }
+
 interface ServiceTypeManagerProps {
   id: string;
 }
+
 const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
-  // const router = useRouter();
   const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([])
   const [newServiceType, setNewServiceType] = useState<Omit<ServiceType, "id" | "serviceList" | "isOpen">>({
     title: "",
@@ -92,7 +91,7 @@ const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
     shortDescription: "",
     description: "",
     phoneNumber: "",
-    type: "",
+    type: "sectionCardOne", // Default value
     url: "",
     isTouristSpot: false,
     contentHtml: "",
@@ -103,7 +102,8 @@ const ServiceTypeManager: React.FC<ServiceTypeManagerProps> = ({id}) => {
   const [isTypeDialogOpen, setIsTypeDialogOpen] = useState(false)
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false)
   const [isClikableLink, setIsClikableLink] = useState(false)
-const [isTouristSpot, setIsTouristSpot] = useState(false)
+  const [isTouristSpot, setIsTouristSpot] = useState(false)
+
   useEffect(() => {
     const fetchServiceTypes = async () => {
       try {
@@ -135,8 +135,15 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
   const handleTypeChange = (selectedType: string) => {
     setNewServiceType((prev) => ({
       ...prev,
-      type: selectedType,
+      type: selectedType as "card" | "banner",
       bannerImage: selectedType === "banner" ? prev.bannerImage : [],
+    }))
+  }
+
+  const handleServiceTypeChange = (selectedType: "sectionCardOne" | "sectionCardTwo" | "sectionCardThree" | "sectionCardFour") => {
+    setNewService((prev) => ({
+      ...prev,
+      type: selectedType,
     }))
   }
 
@@ -176,7 +183,7 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
   }
 
   const handleAddService = async () => {
-    if (!newService.title.trim() || !selectedTypeId) return
+    if (!newService.title.trim() || !selectedTypeId || !newService.type) return
 
     const payload = {
       ...newService,
@@ -212,12 +219,14 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
         shortDescription: "",
         description: "",
         phoneNumber: "",
-        type: "",
+        type: "sectionCardOne",
         url: "",
-    isTouristSpot: false,
-    contentHtml: "",
+        isTouristSpot: false,
+        contentHtml: "",
         imageUrl: "",
       })
+      setIsClikableLink(false)
+      setIsTouristSpot(false)
       setIsServiceDialogOpen(false)
     } catch (error) {
       console.error("Error submitting service:", error)
@@ -258,6 +267,277 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
     } catch (err) {
       console.error("Failed to delete service", err)
     }
+  }
+
+  const renderServiceFields = () => {
+    const serviceType = newService.type
+    
+    return (
+      <>
+        {/* Title - Always shown */}
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="title" className="text-right">
+            Title *
+          </Label>
+          <Input
+            id="title"
+            value={newService.title}
+            onChange={(e) => setNewService({ ...newService, title: e.target.value })}
+            className="col-span-3"
+            required
+          />
+        </div>
+
+        {/* Section Card One: title, shortDescription, description, phoneNumber */}
+        {serviceType === "sectionCardOne" && (
+          <>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="shortDescription" className="text-right">
+                Short Description
+              </Label>
+              <Input
+                id="shortDescription"
+                value={newService.shortDescription}
+                onChange={(e) => setNewService({ ...newService, shortDescription: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="description"
+                value={newService.description}
+                onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="phoneNumber" className="text-right">
+                Phone Number
+              </Label>
+              <Input
+                id="phoneNumber"
+                value={newService.phoneNumber}
+                onChange={(e) => setNewService({ ...newService, phoneNumber: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+          </>
+        )}
+
+        {/* Section Card Two: title, shortDescription, description, phoneNumber, imageUrl */}
+        {serviceType === "sectionCardTwo" && (
+          <>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="shortDescription" className="text-right">
+                Short Description
+              </Label>
+              <Input
+                id="shortDescription"
+                value={newService.shortDescription}
+                onChange={(e) => setNewService({ ...newService, shortDescription: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="description"
+                value={newService.description}
+                onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="phoneNumber" className="text-right">
+                Phone Number
+              </Label>
+              <Input
+                id="phoneNumber"
+                value={newService.phoneNumber}
+                onChange={(e) => setNewService({ ...newService, phoneNumber: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="imageUrl" className="text-right">
+                Image URL
+              </Label>
+              <Input
+                id="imageUrl"
+                value={newService.imageUrl}
+                onChange={(e) => setNewService({ ...newService, imageUrl: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+          </>
+        )}
+
+        {/* Section Card Three: title, shortDescription, description, imageUrl, isTouristSpot, contentHtml, isClikableLink, url */}
+        {serviceType === "sectionCardThree" && (
+          <>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="shortDescription" className="text-right">
+                Short Description
+              </Label>
+              <Input
+                id="shortDescription"
+                value={newService.shortDescription}
+                onChange={(e) => setNewService({ ...newService, shortDescription: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="description"
+                value={newService.description}
+                onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="imageUrl" className="text-right">
+                Image URL
+              </Label>
+              <Input
+                id="imageUrl"
+                value={newService.imageUrl}
+                onChange={(e) => setNewService({ ...newService, imageUrl: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="contentHtml" className="text-right">
+                Content HTML
+              </Label>
+              <Input
+                id="contentHtml"
+                value={newService.contentHtml}
+                onChange={(e) => setNewService({ ...newService, contentHtml: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="isTouristSpot" className="text-right">
+                Is Tourist Spot
+              </Label>
+              <RadioGroup
+                defaultValue="option-two"
+                onValueChange={(value) => setIsTouristSpot(value === "option-one")}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-one" id="tourist-yes" />
+                  <Label htmlFor="tourist-yes">Yes</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-two" id="tourist-no" />
+                  <Label htmlFor="tourist-no">No</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="isClikableLink" className="text-right">
+                Is Clickable Link
+              </Label>
+              <RadioGroup
+                defaultValue="option-two"
+                onValueChange={(value) => setIsClikableLink(value === "option-one")}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-one" id="link-yes" />
+                  <Label htmlFor="link-yes">Yes</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-two" id="link-no" />
+                  <Label htmlFor="link-no">No</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {isClikableLink && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="url" className="text-right">
+                  URL
+                </Label>
+                <Input
+                  id="url"
+                  value={newService.url}
+                  onChange={(e) => setNewService({ ...newService, url: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Section Card Four: title, imageUrl, isClikableLink only */}
+        {serviceType === "sectionCardFour" && (
+          <>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="imageUrl" className="text-right">
+                Image URL
+              </Label>
+              <Input
+                id="imageUrl"
+                value={newService.imageUrl}
+                onChange={(e) => setNewService({ ...newService, imageUrl: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="isClikableLink" className="text-right">
+                Is Clickable Link
+              </Label>
+              <RadioGroup
+                defaultValue="option-two"
+                onValueChange={(value) => setIsClikableLink(value === "option-one")}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-one" id="link-four-yes" />
+                  <Label htmlFor="link-four-yes">Yes</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-two" id="link-four-no" />
+                  <Label htmlFor="link-four-no">No</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {isClikableLink && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="url" className="text-right">
+                  URL
+                </Label>
+                <Input
+                  id="url"
+                  value={newService.url}
+                  onChange={(e) => setNewService({ ...newService, url: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+            )}
+          </>
+        )}
+      </>
+    )
   }
 
   return (
@@ -309,8 +589,6 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                   </div>
                 </div>
 
-
-
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="imageUrl" className="text-right">Image URL</Label>
                   <Input
@@ -328,12 +606,11 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                     <Input
                       id="bannerImages"
                       type="text"
-                      value={newServiceType.bannerImage.join(',')} // Displaying comma-separated URLs
+                      value={newServiceType.bannerImage.join(',')}
                       onChange={(e) => {
-                        const urls = e.target.value.split(',').map(url => url.trim()); // Split by commas and trim whitespace
+                        const urls = e.target.value.split(',').map(url => url.trim());
                         setNewServiceType({
                           ...newServiceType,
-
                           bannerImage: urls,
                         });
                       }}
@@ -345,13 +622,18 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
 
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="isLottie" className="text-right">Is Lottie?</Label>
-                  <Input
+                 
+                   <Checkbox id="isLottie"
+                  checked={newServiceType.isLottie}
+      onCheckedChange={(checked) => setNewServiceType({ ...newServiceType, isLottie: !!checked })}
+                     aria-label='Size default' />
+                  {/* <Input
                     id="isLottie"
                     type="checkbox"
                     checked={newServiceType.isLottie}
-                    onChange={() => setNewServiceType({ ...newServiceType, isLottie: !newServiceType.isLottie })}
+                   
                     className="col-span-3"
-                  />
+                  /> */}
                 </div>
               </div>
               <DialogFooter>
@@ -405,7 +687,6 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-
                 </div>
                 {type.isOpen && (
                   <div className="p-4 pt-0 pl-8 space-y-4">
@@ -415,7 +696,22 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setSelectedTypeId(type.id ?? null); // Set the selected service type ID
+                            setSelectedTypeId(type.id ?? null);
+                            setNewService({
+                              isClikableLink: false,
+                              serviceId: "",
+                              title: "",
+                              shortDescription: "",
+                              description: "",
+                              phoneNumber: "",
+                              type: "sectionCardOne",
+                              url: "",
+                              isTouristSpot: false,
+                              contentHtml: "",
+                              imageUrl: "",
+                            });
+                            setIsClikableLink(false);
+                            setIsTouristSpot(false);
                             setIsServiceDialogOpen(true);
                           }}
                         >
@@ -423,7 +719,7 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                           Add Service
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>Add New Service</DialogTitle>
                           <DialogDescription>
@@ -431,142 +727,31 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                           </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
+                          {/* Service Type Selection - Required */}
                           <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="title" className="text-right">
-                              Title
+                            <Label htmlFor="serviceType" className="text-right">
+                              Service Type *
                             </Label>
-                            <Input
-                              id="title"
-                              value={newService.title}
-                              onChange={(e) => setNewService({ ...newService, title: e.target.value })}
-                              className="col-span-3"
-                            />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="shortDescription" className="text-right">
-                              Short Description
-                            </Label>
-                            <Input
-                              id="shortDescription"
-                              value={newService.shortDescription}
-                              onChange={(e) => setNewService({ ...newService, shortDescription: e.target.value })}
-                              className="col-span-3"
-                            />
-                          </div>
-                            
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="description" className="text-right">
-                              Description
-                            </Label>
-                            <Input
-                              id="description"
-                              value={newService.description}
-                              onChange={(e) => setNewService({ ...newService, description: e.target.value })}
-                              className="col-span-3"
-                            />
-                          </div>
-                           <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="contentHtml" className="text-right">
-                              
-                              content html
-                            </Label>
-                            <Input
-                              id="description"
-                              value={newService.contentHtml}
-                              onChange={(e) => setNewService({ ...newService, contentHtml: e.target.value })}
-                              className="col-span-3"
-                            />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="phoneNumber" className="text-right">
-                              Phone Number
-                            </Label>
-                            <Input
-                              id="phoneNumber"
-                              value={newService.phoneNumber}
-                              onChange={(e) => setNewService({ ...newService, phoneNumber: e.target.value })}
-                              className="col-span-3"
-                            />
-                          </div>
-
-
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="type" className="text-right">
-                              Type
-                            </Label>
-                            <Input
-                              id="type"
-                              value={newService.type}
-                              onChange={(e) => setNewService({ ...newService, type: e.target.value })}
-                              className="col-span-3"
-                            />
-                          </div>
-
-
- <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="isTouristSpot" className="text-right">
-                              Is TouristSpot 
-                            </Label>
-                            <RadioGroup
-                              defaultValue="option-two"
-                              onValueChange={(value) => setIsTouristSpot(value === "option-one")}
-                            >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-one" id="option-one" />
-                                <Label htmlFor="option-one">Yes</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-two" id="option-two" />
-                                <Label htmlFor="option-two">No</Label>
-                              </div>
-                            </RadioGroup>
-
-                          </div>
-
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="isClikableLink" className="text-right">
-                              Is Clikable Link
-                            </Label>
-                            <RadioGroup
-                              defaultValue="option-two"
-                              onValueChange={(value) => setIsClikableLink(value === "option-one")}
-                            >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-one" id="option-one" />
-                                <Label htmlFor="option-one">Yes</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-two" id="option-two" />
-                                <Label htmlFor="option-two">No</Label>
-                              </div>
-                            </RadioGroup>
-
-                          </div>
-                          {isClikableLink && (
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="url" className="text-right">
-                                URL
-                              </Label>
-                              <Input
-                                id="url"
-                                value={newService.url}
-                                onChange={(e) => setNewService({ ...newService, url: e.target.value })}
-                                className="col-span-3"
-                              />
+                            <div className="col-span-3">
+                              <Select
+                                value={newService.type}
+                                onValueChange={handleServiceTypeChange}
+                                required
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select Service Type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="sectionCardOne">Section Card One</SelectItem>
+                                  <SelectItem value="sectionCardTwo">Section Card Two</SelectItem>
+                                  <SelectItem value="sectionCardThree">Section Card Three</SelectItem>
+                                  <SelectItem value="sectionCardFour">Section Card Four</SelectItem>
+                                </SelectContent>
+                              </Select>
                             </div>
-                          )}
-                         
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="imageUrl" className="text-right">
-                              Image URL
-                            </Label>
-                            <Input
-                              id="imageUrl"
-                              value={newService.imageUrl}
-                              onChange={(e) => setNewService({ ...newService, imageUrl: e.target.value })}
-                              className="col-span-3"
-                            />
                           </div>
+
+                          {renderServiceFields()}
                         </div>
                         <DialogFooter>
                           <Button onClick={handleAddService}>Add Service</Button>
@@ -579,9 +764,10 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                           key={service.id}
                           className="flex items-center justify-between p-2 rounded-lg border"
                         >
-                          <span>{service.title}</span>
-
-
+                          <div>
+                            <span className="font-medium">{service.title}</span>
+                            <span className="ml-2 text-sm text-gray-500">({service.type})</span>
+                          </div>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button
@@ -598,7 +784,7 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                               <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  This will permanently delete the service type and all its services.
+                                  This will permanently delete the service.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
@@ -611,17 +797,6 @@ const [isTouristSpot, setIsTouristSpot] = useState(false)
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
-                          {/* <Button
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => {
-                              if (type.id) {
-                                router.push(`/dashboard/details/create/${service.id}`);
-                              }
-                            }}
-                          >
-                            Create Details Page
-                          </Button> */}
                         </div>
                       ))}
                     </div>
