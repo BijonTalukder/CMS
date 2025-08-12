@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form"
 import { Loader2 } from "lucide-react"
 import { baseUrl } from "@/utility/config"
+import useUserStore from "@/store/userStore"
 
 // Define form schema with Zod
 const formSchema = z.object({
@@ -39,7 +40,7 @@ type FormData = z.infer<typeof formSchema>
 export default function LoginPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
+  const setUser = useUserStore(state => state.setUser);
   // Initialize form with react-hook-form
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -61,6 +62,7 @@ export default function LoginPage() {
       const data = await res.json();
       if (res.ok) {
         console.log(data.token)
+        setUser(data.user);
         document.cookie = `token=${data.token}; path=/; max-age=3600`;
         // On success
         router.push('/dashboard');
