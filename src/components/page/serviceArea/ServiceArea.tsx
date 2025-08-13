@@ -10,27 +10,61 @@ import { Switch } from '@/components/ui/switch'
 import axios from 'axios'
 import { baseUrl } from '@/utility/config'
 import Link from 'next/link'
+import useUserStore from '@/store/userStore'
+
+// type PermissionObject = {
+//   [key: string]: string[]; // e.g. { news: ["view", "create"], ... }
+// };
+
+// type UserPermission = {
+//   id: string;
+//   userId: string;
+//   areaId: string;
+//   permissions: PermissionObject;
+//   status: boolean;
+//   createdAt: string;
+// };
+
+// type User = {
+//   id: string;
+//   email: string;
+//   phone: string;
+//   role: string;
+//   name: string;
+//   status: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+//   userPermissions: UserPermission[];
+// };
 
 type ServiceArea = {
-  id: string
-  name: string
-  description?: string
-  status: boolean
-}
-
+  id: string;
+  name: string;
+  description?: string;
+  status: boolean;
+};
 const ServiceAreaPage=()=> {
   const [open, setOpen] = useState(false)
   const [areas, setAreas] = useState<ServiceArea[]>([])
   const [form, setForm] = useState({ name: '', description: '', status: true })
+  const user = useUserStore(state => state.user)
 
-  const fetchAreas = async () => {
-    try {
-      const res = await axios.get(`${baseUrl}/service-areas`)
-      setAreas(res.data?.data || [])
-    } catch (err) {
-      console.error('Failed to fetch service areas', err)
+const fetchAreas = async (): Promise<void> => {
+  try {
+    const res = await axios.get<{ data: ServiceArea[] }>(`${baseUrl}/service-areas`);
+    const allAreas = res.data?.data || [];
+
+    if (user?.userPermissions?.length) {
+      const allowedAreaIds = user.userPermissions.map((p:any) => p.areaId);
+      const filteredAreas = allAreas.filter((area) => allowedAreaIds.includes(area.id));
+      setAreas(filteredAreas);
+    } else {
+      setAreas(allAreas);
     }
+  } catch (err) {
+    console.error('Failed to fetch service areas', err);
   }
+};
 
   const createArea = async () => {
     try {

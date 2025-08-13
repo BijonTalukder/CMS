@@ -2,16 +2,12 @@
 import React from 'react';
 import { 
  
-  Menu,
+
   Bell,
-  Search,
+
   ChevronDown
 } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+
 
 import {
   DropdownMenu,
@@ -22,8 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-
-import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,13 +31,20 @@ const DashboardLayout=({ children }: { children: React.ReactNode }) => {
   // if (!user) {
   //   return <h1>user not found</h1>
   // }
+  const clearUser = useUserStore(state => state.clearUser);
 
-
+const handleSignOut=()=>{
+clearUser()
+ document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  
+  // Optionally redirect
+  window.location.href = '/login';
+}
 
     return (
     <div className="min-h-screen bg-background">
       {/* Mobile Navigation */}
-   <MobileNavigation/>
+
       {/* Desktop Navigation */}
       <div className="hidden md:block fixed inset-y-0 z-50 w-64 border-r">
         <Sidebar />
@@ -55,30 +56,7 @@ const DashboardLayout=({ children }: { children: React.ReactNode }) => {
         <header className="sticky top-0 z-40 border-b bg-background">
           <div className="container flex h-16 items-center justify-between px-4 max-w-full">
             {/* Mobile Menu Button */}
-            <div className="flex items-center gap-4">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="md:hidden">
-                    <Menu />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-64 p-0">
-                  <Sidebar />
-                </SheetContent>
-              </Sheet>
-
-              {/* Search */}
-              <div className="max-w-md w-full">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input 
-                    placeholder="Search..." 
-                    className="pl-10 w-full"
-                  />
-                </div>
-              </div>
-            </div>
-
+               <MobileNavigation/>
          
             <div className="flex items-center gap-2">
             
@@ -120,7 +98,7 @@ const DashboardLayout=({ children }: { children: React.ReactNode }) => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Profile</DropdownMenuItem>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Sign out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -130,12 +108,12 @@ const DashboardLayout=({ children }: { children: React.ReactNode }) => {
         {/* Main Content */}
         <main className="flex-1 p-8">
           <div className="flex flex-col gap-8">
-            <div>
+            {/* <div>
               <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
               <p className="text-muted-foreground">
                 Welcome to your CMS dashboard
               </p>
-            </div>
+            </div> */}
 
             <div className="border rounded-lg p-6">
 

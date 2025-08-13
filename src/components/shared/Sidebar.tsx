@@ -11,29 +11,30 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import useUserStore from '@/store/userStore';
 
 const navItems = [
-  { icon: <LayoutDashboard size={20} />, label: 'Dashboard', href: '/dashboard' },
-  { icon: <FileText size={20} />, label: 'Tourist Spot', href: '/dashboard/tourist-spot' },
-  { icon: <FileText size={20} />, label: 'News', href: '/dashboard/news' },
-  { icon: <FileText size={20} />,
-   label: 'Breaking News',
-   href: '/dashboard/breaking-news' },
+  { key: 'dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard', href: '/dashboard' },
+  { key: 'tourist-spot', icon: <FileText size={20} />, label: 'Tourist Spot', href: '/dashboard/tourist-spot' },
+  { key: 'news', icon: <FileText size={20} />, label: 'News', href: '/dashboard/news' },
+  { key: 'breaking-news', icon: <FileText size={20} />, label: 'Breaking News', href: '/dashboard/breaking-news' },
   {
+    key: 'users',
     icon: <Users size={20} />,
     label: 'Users',
     children: [
-      { label: 'Create User', href: '/dashboard/users/create' },
-      { label: 'List Users', href: '/dashboard/users/list' },
+      { key: 'users-create', label: 'Create User', href: '/dashboard/users/create' },
+      { key: 'users-list', label: 'List Users', href: '/dashboard/users/list' },
     ],
   },
-  { icon: <Settings size={20} />, label: 'Settings', href: '/dashboard/settings' },
+  { key: 'settings', icon: <Settings size={20} />, label: 'Settings', href: '/dashboard/settings' },
 ];
 
 type OpenState = Record<string, boolean>;
 
 const Sidebar = ({ className = '' }) => {
   const pathname = usePathname();
+  const user = useUserStore(state => state.user)
 
   const [open, setOpen] = React.useState<OpenState>(() => {
     const initial: OpenState = {};
@@ -50,13 +51,46 @@ const Sidebar = ({ className = '' }) => {
 
   const isActive = (href?: string) => href && pathname.startsWith(href);
 
+  const allowedKeys = React.useMemo(() => {
+    if (!user?.userPermissions) return [];
+    const keys: string[] = [];
+
+    user.userPermissions.forEach((perm:any) => {
+      Object.keys(perm.permissions).forEach((pKey) => {
+        if (perm.permissions[pKey].includes('view')) {
+          keys.push(pKey);
+        }
+      });
+    });
+
+    return [...new Set(keys)]; 
+  }, [user]);
+
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.key) return false;
+    if (item.key === 'dashboard' || item.key === 'settings') return true; 
+
+    if (item.children) {
+      const allowedChildren = item.children.filter((child) =>
+        allowedKeys.some((key) => child.key?.includes(key))
+      );
+      if (allowedChildren.length) {
+        item.children = allowedChildren;
+        return true;
+      }
+      return false;
+    }
+
+    return allowedKeys.includes(item.key);
+  });
+
   return (
     <div className={`pb-12 min-h-screen ${className}`}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold">CMS Dashboard</h2>
           <div className="space-y-1">
-            {navItems.map((item, index) => {
+            {filteredNavItems.map((item, index) => {
               const hasChildren = !!item.children?.length;
 
               if (!hasChildren) {
