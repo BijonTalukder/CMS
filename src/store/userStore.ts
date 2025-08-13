@@ -1,16 +1,22 @@
-import {create} from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-const useUserStore = create(
+interface UserState {
+  user: any | null; // Replace `any` with your user type
+  setUser: (userData: any) => void;
+  clearUser: () => void;
+}
+
+const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      user: null, 
+      user: null,
       setUser: (userData) => set({ user: userData }),
       clearUser: () => set({ user: null }),
     }),
     {
-      name: 'user-storage',  
-      getStorage: () => localStorage, 
+      name: 'user-storage',
+      storage: createJSONStorage(() => localStorage), // <-- wrap localStorage
     }
   )
 );

@@ -29,30 +29,21 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Sidebar from '@/components/shared/Sidebar';
 import useUserStore from '@/store/userStore';
+import MobileNavigation from '../shared/MobileNavigation/MobileNavigation';
 // import { Button } from "@/compone
 const DashboardLayout=({ children }: { children: React.ReactNode }) => {
 
   const user = useUserStore(state => state.user)
-  if (!user) {
-    return <h1>user not found</h1>
-  }
+  // if (!user) {
+  //   return <h1>user not found</h1>
+  // }
 
 
 
     return (
     <div className="min-h-screen bg-background">
       {/* Mobile Navigation */}
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
-          <Sidebar />
-        </SheetContent>
-      </Sheet>
-
+   <MobileNavigation/>
       {/* Desktop Navigation */}
       <div className="hidden md:block fixed inset-y-0 z-50 w-64 border-r">
         <Sidebar />
@@ -115,11 +106,11 @@ const DashboardLayout=({ children }: { children: React.ReactNode }) => {
                   <Button variant="ghost" className="gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src="/api/placeholder/32/32" />
-                      <AvatarFallback>JD</AvatarFallback>
+                      <AvatarFallback>{user?.name.slice(0,2)}</AvatarFallback>
                     </Avatar>
                     <div className="hidden md:block text-left">
-                      <p className="text-sm font-medium">John Doe</p>
-                      <p className="text-xs text-muted-foreground">Admin</p>
+                      <p className="text-sm font-medium">{user?.name}</p>
+                      <p className="text-xs text-muted-foreground">{user?.role}</p>
                     </div>
                     <ChevronDown className="h-4 w-4 text-muted-foreground" />
                   </Button>
