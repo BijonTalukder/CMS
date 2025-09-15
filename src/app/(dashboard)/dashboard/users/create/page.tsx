@@ -48,7 +48,8 @@ export default function CreateUserPage() {
     "tourist-spot",
     "users",
     "reports",
-    "breaking-news"
+    "breaking-news",
+    "prompts"
   ];
 
   useEffect(() => {

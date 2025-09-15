@@ -27,6 +27,15 @@ const navItems = [
       { key: 'users-list', label: 'List Users', href: '/dashboard/users/list' },
     ],
   },
+{
+    key: 'prompts',
+    icon: <Users size={20} />,
+    label: 'Prompts',
+    children: [
+      { key: 'prompts-create', label: 'Create Prompts', href: '/dashboard/prompts/create' },
+      { key: 'prompts', label: 'List Users', href: '/dashboard/prompts' },
+    ],
+  },
   { key: 'settings', icon: <Settings size={20} />, label: 'Settings', href: '/dashboard/settings' },
 ];
 
