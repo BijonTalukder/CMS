@@ -1,2 +1,2 @@
 
-export const baseUrl: string =  'http://localhost:5000/api/v1';
+export const baseUrl: string =  'https://backend-eight-lake-96.vercel.app/api/v1';
