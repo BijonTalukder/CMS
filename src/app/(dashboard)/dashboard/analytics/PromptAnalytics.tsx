@@ -29,7 +29,7 @@ export default function PromptAnalytics() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await fetch(`${baseUrl}/analytics`);
+        const res = await fetch(`${baseUrl}/prompt-interaction/analytics`);
         if (!res.ok) throw new Error("Failed to fetch analytics");
 
         const json = await res.json();
