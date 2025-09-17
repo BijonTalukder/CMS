@@ -36,6 +36,8 @@ const navItems = [
       { key: 'prompts', label: 'List Users', href: '/dashboard/prompts' },
     ],
   },
+    { key: 'categories', icon: <Settings size={20} />, label: 'categories', href: '/dashboard/categories' },
+
   { key: 'settings', icon: <Settings size={20} />, label: 'Settings', href: '/dashboard/settings' },
 ];
 

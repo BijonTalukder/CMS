@@ -49,7 +49,8 @@ export default function CreateUserPage() {
     "users",
     "reports",
     "breaking-news",
-    "prompts"
+    "prompts",
+    "categories"
   ];
 
   useEffect(() => {
